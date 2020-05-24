@@ -4,22 +4,15 @@
 
 FROM python:3.7
 
-# update apt database
-RUN apt update -yqq
+RUN apt-get update -yqq
+RUN apt-get install -qqy mariadb-server > /dev/null
 
-# install MariaDB
-RUN apt install -qqy mariadb-server
-
-# install some utilities
-RUN apt install -yqq vim
-
-# install ZoomFoundry
 RUN pip install ZoomFoundry
 
-# install startup script
-RUN mkdir -p /work/web/sites/localhost
+RUN mkdir -p /work
+COPY start.sh /work
 WORKDIR /work
-ADD start.sh /work
 
 # run the server
+EXPOSE 80
 CMD ["/bin/bash", "start.sh"]
